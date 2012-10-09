@@ -1,1 +1,0 @@
-Simple web imap client.

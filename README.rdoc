@@ -1,0 +1,3 @@
+== Simple Mail Client
+
+Simple web imap client.
