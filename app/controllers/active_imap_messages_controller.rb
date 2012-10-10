@@ -3,7 +3,9 @@ class ActiveImapMessagesController < ApplicationController
   # GET /active_imap_messages
   # GET /active_imap_messages.json
   def index
-    #@active_imap_messages = ActiveImapMessage.all
+    if params[:folder_id]
+      @folder = ActiveImap::Folder.find_by_mailbox(@connection,@folder.mailbox + "." + params[:folder_id])
+    end
     @active_imap_messages = @folder.messages(:order => 'REVERSE,DATE' )
     respond_to do |format|
       format.html # index.html.erb
@@ -73,8 +75,8 @@ class ActiveImapMessagesController < ApplicationController
   # DELETE /active_imap_messages/1
   # DELETE /active_imap_messages/1.json
   def destroy
-    @active_imap_message = ActiveImapMessage.find(params[:id])
-    @active_imap_message.destroy
+    @active_imap_message = ActiveImapMessage.find(@folder, params[:id])
+    @active_imap_message.delete
 
     respond_to do |format|
       format.html { redirect_to active_imap_messages_url }
