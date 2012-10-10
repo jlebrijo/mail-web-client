@@ -1,0 +1,27 @@
+%h1 Listing active_imap_messages
+
+%table
+  %tr
+    %th Subject
+    %th From
+    %th Sender
+    %th To
+    %th Date
+    %th
+    %th
+    %th
+
+  - @active_imap_messages.each do |active_imap_message|
+    %tr{:class => ("unseen" if active_imap_message.unseen?)}
+      %td= active_imap_message.subject
+      %td= active_imap_message.from
+      %td= active_imap_message.sender
+      %td= active_imap_message.to
+      %td= active_imap_message.date
+      %td= link_to 'Show', active_imap_message
+      %td= link_to 'Edit', edit_active_imap_message_path(active_imap_message)
+      %td= link_to 'Destroy', active_imap_message, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Active imap message', new_active_imap_message_path

@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Subject:
+  = @active_imap_message.subject
+%p
+  %b From:
+  = @active_imap_message.from
+%p
+  %b Sender:
+  = @active_imap_message.sender
+%p
+  %b To:
+  = @active_imap_message.to
+%p
+  %b Date:
+  = @active_imap_message.date
+%p
+  %b Text content:
+  = @active_imap_message.text_content
+
+= link_to 'Edit', edit_active_imap_message_path(@active_imap_message)
+\|
+= link_to 'Back', active_imap_messages_path
