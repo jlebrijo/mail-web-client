@@ -1,28 +1,12 @@
-= form_for @active_imap_message do |f|
-  - if @active_imap_message.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@active_imap_message.errors.count, "error")} prohibited this active_imap_message from being saved:"
-      %ul
-        - @active_imap_message.errors.full_messages.each do |msg|
-          %li= msg
-
+= form_tag active_imap_messages_path do |f|
   .field
-    = f.label :subject
-    = f.text_field :subject
+    = label_tag :to
+    = text_field_tag :to
   .field
-    = f.label :from
-    = f.text_field :from
+    = label_tag :subject
+    = text_field_tag :subject
   .field
-    = f.label :sender
-    = f.text_field :sender
-  .field
-    = f.label :to
-    = f.text_field :to
-  .field
-    = f.label :date
-    = f.date_select :date
-  .field
-    = f.label :text_content
-    = f.text_area :text_content
+    = label_tag :body
+    = text_area_tag :body
   .actions
-    = f.submit 'Save'
+    = submit_tag 'Send'

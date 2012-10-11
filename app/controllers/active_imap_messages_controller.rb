@@ -5,12 +5,11 @@ class ActiveImapMessagesController < ApplicationController
   def index
     if params[:folder_id]
       @folder = ActiveImap::Folder.find_by_mailbox(@connection,@folder.mailbox + "." + params[:folder_id])
+      @@imap_connections[current_user.id][:folder] = @folder
+    else
+      @@imap_connections[current_user.id][:folder] = ActiveImap::Folder.first(@connection)
     end
     @active_imap_messages = @folder.messages(:order => 'REVERSE,DATE' )
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @active_imap_messages }
-    end
   end
 
   # GET /active_imap_messages/1
@@ -24,54 +23,6 @@ class ActiveImapMessagesController < ApplicationController
     end
   end
 
-  # GET /active_imap_messages/new
-  # GET /active_imap_messages/new.json
-  def new
-    @active_imap_message = ActiveImapMessage.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @active_imap_message }
-    end
-  end
-
-  # GET /active_imap_messages/1/edit
-  def edit
-    @active_imap_message = ActiveImapMessage.find(params[:id])
-  end
-
-  # POST /active_imap_messages
-  # POST /active_imap_messages.json
-  def create
-    @active_imap_message = ActiveImapMessage.new(params[:active_imap_message])
-
-    respond_to do |format|
-      if @active_imap_message.save
-        format.html { redirect_to @active_imap_message, notice: 'Active imap message was successfully created.' }
-        format.json { render json: @active_imap_message, status: :created, location: @active_imap_message }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @active_imap_message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /active_imap_messages/1
-  # PUT /active_imap_messages/1.json
-  def update
-    @active_imap_message = ActiveImapMessage.find(params[:id])
-
-    respond_to do |format|
-      if @active_imap_message.update_attributes(params[:active_imap_message])
-        format.html { redirect_to @active_imap_message, notice: 'Active imap message was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @active_imap_message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /active_imap_messages/1
   # DELETE /active_imap_messages/1.json
   def destroy
@@ -82,6 +33,16 @@ class ActiveImapMessagesController < ApplicationController
       format.html { redirect_to active_imap_messages_url }
       format.json { head :no_content }
     end
+  end
+  def new
+    @smtp_message = SmtpMessage.new
+  end  
+  # POST /active_imap_messages
+  def create
+    InboxMailer.create_mail(current_user, params).deliver
+    @folder.connection.save_sent_message(current_user.email, params)
+    redirect_to :controller => 'active_imap_messages', :action => 'index', :notice => "Mail sent"
+
   end
   protected
   # This code is to persist in RAM the IMAP connections of the people
