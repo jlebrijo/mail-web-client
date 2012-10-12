@@ -24,5 +24,5 @@ gem "cancan", ">= 1.6.8"
 gem "rolify", ">= 3.2.0"
 gem "quiet_assets", ">= 1.0.1", :group => :development
 
-gem 'activeimap', :path => '../activeimap'
-#em 'activeimap', :git => 'git://github.com/jlebrijo/activeimap.git'
+#gem 'activeimap', :path => '../activeimap'
+gem 'activeimap', :git => 'git://github.com/jlebrijo/activeimap.git'

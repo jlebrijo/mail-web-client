@@ -1,5 +1,6 @@
-PATH
-  remote: ../activeimap
+GIT
+  remote: git://github.com/jlebrijo/activeimap.git
+  revision: d83d1b586a5c9e2d0bb92640f14775a88bc1581f
   specs:
     activeimap (0.0.0)
       activemodel (>= 3.0.0.beta3)
