@@ -1,0 +1,12 @@
+%h3 Login
+= form_tag user_session_path do
+  = text_field_tag 'user[email]', nil, :placeholder => "Email"
+  %br
+  = password_field_tag 'user[password]', nil, :placeholder => "Password"
+  %br
+  %button.btn.btn-primary Sign in
+  %br
+  = check_box_tag 'user[remember_me]'
+  %small.remember
+    = 'Remember me · '
+    = link_to "Forgot your password?", new_password_path('user')

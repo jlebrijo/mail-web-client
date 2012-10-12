@@ -1,5 +1,7 @@
-%h1 New smtp_message
+%h3 New Message
 
 = render 'form'
 
-= link_to 'Back', active_imap_messages_path
+%ul.pager
+  %li.previous
+    = link_to "Back", active_imap_messages_path

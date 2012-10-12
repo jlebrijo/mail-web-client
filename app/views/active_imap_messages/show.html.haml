@@ -1,22 +1,20 @@
 %p#notice= notice
 
 %p
+  %b From:
+  = @active_imap_message.from[0]
+%p
+  %b To:
+  = @active_imap_message.to[0]
+%p
+  %b Date:
+  = @active_imap_message.date.strftime("%a, %b %e at %l:%M %p")
+%p
   %b Subject:
   = @active_imap_message.subject
 %p
-  %b From:
-  = @active_imap_message.from
-%p
-  %b Sender:
-  = @active_imap_message.sender
-%p
-  %b To:
-  = @active_imap_message.to
-%p
-  %b Date:
-  = @active_imap_message.date
-%p
   %b Text content:
-  = @active_imap_message.text_content
+  .mail-text
+    = @active_imap_message.text_content[0]
 
 = link_to 'Inbox', active_imap_messages_path

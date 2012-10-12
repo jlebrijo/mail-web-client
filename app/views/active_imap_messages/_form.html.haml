@@ -1,12 +1,9 @@
 = form_tag active_imap_messages_path do |f|
   .field
-    = label_tag :to
-    = text_field_tag :to
+    = text_field_tag :to, nil, {:placeholder => "Destination"}
   .field
-    = label_tag :subject
-    = text_field_tag :subject
+    = text_field_tag :subject, nil , {:placeholder => "Subject"}
   .field
-    = label_tag :body
-    = text_area_tag :body
+    = text_area_tag :body, nil, {:class => "mail-text-area"}
   .actions
-    = submit_tag 'Send'
+    = submit_tag 'Send', :class => ["btn","btn-primary"]

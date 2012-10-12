@@ -1,5 +1,5 @@
 class ActiveImapMessagesController < ApplicationController
-  before_filter :load_imap_connection
+  before_filter :authenticate_user!, :load_imap_connection
   # GET /active_imap_messages
   # GET /active_imap_messages.json
   def index
