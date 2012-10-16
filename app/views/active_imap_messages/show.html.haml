@@ -2,10 +2,10 @@
 
 %p
   %b From:
-  = @active_imap_message.from[0].force_encoding('utf-8')
+  = @active_imap_message.from[0].to_s.force_encoding('utf-8')
 %p
   %b To:
-  = @active_imap_message.to[0].force_encoding('utf-8')
+  = @active_imap_message.to[0].to_s.force_encoding('utf-8')
 %p
   %b Date:
   = @active_imap_message.date.strftime("%a, %b %e at %l:%M %p")
