@@ -1,17 +1,17 @@
 %h3 Messages listing
 
 .mail-sheet
-  - unless params[:folder_id]
-    = link_to 'Compose', new_active_imap_message_path, :class => ["btn","btn-info", "pull-right"]
+  - if params[:folder_id] == 'INBOX'
+    = link_to 'Compose', new_folder_active_imap_message_path, :class => ["btn","btn-info", "pull-right"]
   %ul.nav.nav-tabs
-    %li{:class => ("active" unless params[:folder_id])}= link_to 'Inbox', active_imap_messages_path
-    %li{:class => ("active" if params[:folder_id] == 'Sent')}= link_to 'Sent', change_folder_path('Sent')
-    %li{:class => ("active" if params[:folder_id] == 'Trash')}= link_to 'Trash', change_folder_path('Trash')
+    %li{:class => ("active" if params[:folder_id] == 'INBOX')}= link_to 'Inbox', folder_active_imap_messages_path(:folder_id => 'INBOX')
+    %li{:class => ("active" if params[:folder_id] == 'Sent')}= link_to 'Sent', folder_active_imap_messages_path(:folder_id => 'Sent')
+    %li{:class => ("active" if params[:folder_id] == 'Trash')}= link_to 'Trash', folder_active_imap_messages_path(:folder_id => 'Trash')
   
   %table.table.table-hover
     - @active_imap_messages.each do |active_imap_message|
       %tr{:class => ("unseen" if active_imap_message.unseen?)}
-        %td= link_to active_imap_message.subject, active_imap_message
+        %td= link_to active_imap_message.subject, folder_active_imap_message_path(params[:folder_id], active_imap_message)
         %td= active_imap_message.from[0]
         %td= time_ago_in_words active_imap_message.date
         - unless params[:folder_id]

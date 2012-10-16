@@ -2,19 +2,19 @@
 
 %p
   %b From:
-  = @active_imap_message.from[0]
+  = @active_imap_message.from[0].force_encoding('utf-8')
 %p
   %b To:
-  = @active_imap_message.to[0]
+  = @active_imap_message.to[0].force_encoding('utf-8')
 %p
   %b Date:
   = @active_imap_message.date.strftime("%a, %b %e at %l:%M %p")
 %p
   %b Subject:
-  = @active_imap_message.subject
+  = @active_imap_message.subject.force_encoding('utf-8')
 %p
   %b Text content:
   .mail-text
-    = @active_imap_message.text_content[0]
+    = @active_imap_message.text_content[0].force_encoding('utf-8')
 
-= link_to 'Inbox', active_imap_messages_path
+= link_to 'Inbox', folder_active_imap_messages_path

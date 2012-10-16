@@ -2,7 +2,7 @@
 %ul.nav
   - if user_signed_in? 
     %li
-      = link_to 'MailBox', active_imap_messages_path
+      = link_to 'MailBox', folder_active_imap_messages_path(:folder_id => 'INBOX')
     - if current_user.has_role? :admin
       %li
         = link_to 'Admin', users_path

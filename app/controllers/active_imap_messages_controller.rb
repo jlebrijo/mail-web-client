@@ -1,14 +1,9 @@
 class ActiveImapMessagesController < ApplicationController
   before_filter :authenticate_user!, :load_imap_connection
+  after_filter :close_connection
   # GET /active_imap_messages
   # GET /active_imap_messages.json
   def index
-    if params[:folder_id]
-      @folder = ActiveImap::Folder.find_by_mailbox(@connection,@folder.mailbox + "." + params[:folder_id])
-      @@imap_connections[current_user.id][:folder] = @folder
-    else
-      @@imap_connections[current_user.id][:folder] = ActiveImap::Folder.first(@connection)
-    end
     @active_imap_messages = @folder.messages(:order => 'REVERSE,DATE' )
   end
 
@@ -45,26 +40,12 @@ class ActiveImapMessagesController < ApplicationController
 
   end
   protected
-  # This code is to persist in RAM the IMAP connections of the people
-  #
-  # Study if this is useful in terms of efficiency with a local imap server
-  # If doesn't improve efficiency you can simplify to this:
-  #      @connection = ActiveImap::Connection.new(current_user.email,current_user.imap_password)
-  #      @folder = ActiveImap::Folder.first(@connection)
-  @@imap_connections = Hash.new
   def load_imap_connection
-    unless @@imap_connections.empty?
-      logger.info "Getting connection !!"
-      if @@imap_connections.include?(current_user.id)
-        @connection = @@imap_connections[current_user.id][:connection]
-        @folder = @@imap_connections[current_user.id][:folder]
-      end
-    end
-    unless @connection
-      logger.info "Initializing connection !!"
-      @connection = ActiveImap::Connection.new(current_user.email,current_user.imap_password)
-      @folder = ActiveImap::Folder.first(@connection)
-      @@imap_connections[current_user.id] = { :connection => @connection, :folder => @folder}
-    end
+    @connection = ActiveImap::Connection.new(current_user.email,current_user.imap_password)
+    folder_name = ( params[:folder_id] == 'INBOX' ? params[:folder_id] : 'INBOX.'+params[:folder_id])
+    @folder = ActiveImap::Folder.find_by_mailbox(@connection,folder_name)
+  end
+  def close_connection
+   @connection.logout_and_disconnect 
   end
 end
